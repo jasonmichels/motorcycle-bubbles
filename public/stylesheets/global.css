@@ -1,0 +1,9 @@
+.padded {
+  padding: 5px;
+}
+
+.dashed-line {
+  margin-bottom: 2em;
+  margin-top: 2em;
+  border-top: 3px dashed #DAD8D7;
+}
