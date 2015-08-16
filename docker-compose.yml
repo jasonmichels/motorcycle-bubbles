@@ -1,0 +1,12 @@
+web:
+  build: .
+  ports:
+   - "3000:3000"
+  environment:
+    - PORT=3000
+    - NODE_ENV=development
+    - DEBUG=history-service:*
+mongoDB:
+  image: tutum/mongodb
+  environment:
+    - AUTH=no
