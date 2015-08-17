@@ -210,13 +210,23 @@ GAME.endGame = function ()
     clearInterval(GAME.gameTimer);
     alert('Game is over, you missed too many bubbles: ' + GAME.missedBubbles);
 
+    // Assign handlers immediately after making the request,
+    // and remember the jqxhr object for this request
+    $.post( "/game/" + GAME.id + "/end", { poppedBubbles: GAME.poppedBubbles, missedBubbles: GAME.missedBubbles }, function(response) {
+        // This is for our own use, so do not worry about notifying user
+        console.log('Ajax response');
+        console.log(response);
+    })
+    .fail(function(response) {
+        console.log('for some reason ajax did not work');
+        console.log(response);
+        // Game is already over, for this example we dont need to worry we cannot end game on server.
+        // If this was production we would add some error handling for user to know their game did not save
+    });
+
     GAME.poppedBubbles = 0;
     GAME.missedBubbles = 0;
     GAME.nuke();
-    GAME.canvas = null;
-    GAME.context = null;
-    GAME.bufferCanvas = null;
-    GAME.bufferCanvasCtx = null;
     GAME.id = null;
 };
 

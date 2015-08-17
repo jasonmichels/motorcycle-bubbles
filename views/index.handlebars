@@ -8,7 +8,6 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="panel panel-default">
-                    <!-- Default panel contents -->
                     <div class="panel-heading">Stats</div>
                     <div class="panel-body">
                         <div class="btn-group btn-group-lg" role="group" aria-label="...">
@@ -16,8 +15,6 @@
                             <button type="button" class="btn btn-danger js-end-game">End Game</button>
                         </div>
                     </div>
-
-                    <!-- List group -->
                     <ul class="list-group">
                         <li class="list-group-item">Popped: <span id="js-popped-bubbles-text">0</span></li>
                         <li class="list-group-item">Missed: <span id="js-missed-bubbles-text">0</span></li>
@@ -27,21 +24,13 @@
         </div>
         <div class="row">
             <div class="col-md-12">
-                <a href="#" class="js-choose-bubble-image">
-                    <img class="bubble-thumb" src="https://s3.amazonaws.com/BikeFreeTv-Output/user_videos/2/92/thumbs/hd--00001.png" alt="Image">
-                </a>
-                <a href="#" class="js-choose-bubble-image">
-                    <img class="bubble-thumb" src="https://s3.amazonaws.com/BikeFreeTv-Output/user_videos/2/93/thumbs/hd--00001.png" alt="Image">
-                </a>
-                <a href="#" class="js-choose-bubble-image">
-                    <img class="bubble-thumb" src="https://s3.amazonaws.com/BikeFreeTv-Output/user_videos/2/91/thumbs/hd--00001.png" alt="Image">
-                </a>
-                <a href="#" class="js-choose-bubble-image">
-                    <img class="bubble-thumb" src="https://s3.amazonaws.com/BikeFreeTv-Output/user_videos/2/90/thumbs/hd--00001.png" alt="Image">
-                </a>
+                {{#each result.videos}}
+                    <a href="#" class="js-choose-bubble-image">
+                        <img class="bubble-thumb" src="{{ thumbnail }}" alt="{{ title }}">
+                    </a>
+                {{/each}}
             </div>
         </div>
-
     </div>
 
 </div>
