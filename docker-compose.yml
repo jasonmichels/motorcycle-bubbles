@@ -10,7 +10,7 @@ web:
     - ANALYTICS_EVENT_ENABLED=true
     - ANALYTICS_EVENT_HOST=circuitBreakerAnalytics
     - ANALYTICS_EVENT_PORT=3001
-    - DEBUG=history-service:*
+    - DEBUG=motorcycle-bubbles:*
     - BUBBLES_BASE_URL=bikefree.tv
   links:
     - mongoDB:mongoDB
