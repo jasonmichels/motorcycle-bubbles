@@ -1,2 +1,2 @@
-FROM node:0.12-onbuild
-EXPOSE 3000
+FROM jasonmichels/php-apache
+ADD . /var/www/html

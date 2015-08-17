@@ -1,0 +1,5 @@
+# Application environment
+project.application-environment=@APP_ENV@
+
+# Your rewrite base
+project.rewrite-base=@REWRITE_BASE@

@@ -1,0 +1,28 @@
+{
+  "name": "jasonmichels/motorcycle-bubbles",
+  "description": "Jason Michels Motorcycle Bubbles Popping Game",
+  "authors": [
+    {
+      "name": "Jason Michels",
+      "email": "michelsja@icloud.com"
+    }
+  ],
+  "license": "Closed",
+  "type": "project",
+  "require": {
+    "slim/slim": "2.*",
+    "guzzle/guzzle": "3.9.*@dev"
+  },
+  "require-dev": {
+    "mockery/mockery": "0.9.*",
+    "phpunit/phpunit": "~4.0",
+    "phing/phing": "2.11.*@dev",
+    "halleck45/php-metrics": "dev-master"
+  },
+  "autoload": {
+    "psr-4": {
+      "JasonMichels\\": "./src/",
+      "JasonMichels\\UnitTests\\": "./tests/src/"
+    }
+  }
+}

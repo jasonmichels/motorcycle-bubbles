@@ -212,12 +212,7 @@ GAME.endGame = function ()
     clearInterval(GAME.gameTimer);
     GAME.isActive = false;
 
-    $.post( "/game/" + GAME.id + "/end", { poppedBubbles: GAME.poppedBubbles, missedBubbles: GAME.missedBubbles }, function(response) {
-        alert('Game is over, you missed too many bubbles: ' + GAME.missedBubbles + '. ' + response.message);
-    })
-    .fail(function(response) {
-        alert(response.message);
-    });
+    alert('Game is over, you missed too many bubbles: ' + GAME.missedBubbles);
 
     GAME.poppedBubbles = 0;
     GAME.missedBubbles = 0;

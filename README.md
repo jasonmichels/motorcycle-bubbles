@@ -1,18 +1,32 @@
-# Motorcycle Bubble Popping Game
+# Motorcycle Bubble Popping Game (PHP)
 
-The easiest way to run this full application is to use Docker (http://docs.docker.com/mac/started/) and Docker Compose.
-Once docker is installed you can use docker-compose tool to get application environment setup and running.
-This will setup the application, a mongo database, and a circuit breaker analytics platform I have built using Node.js.
+This is a slimmed down version of the Motorcycle bubble popping game, built in PHP.
+An API call is made to the BikeFree.TV website to get a list of motorcycle videos. The thumbnails are used as options for the bubbles you can pop.
+If you want the full version build with Node.js and with MongoDB, use the Master branch (https://github.com/jasonmichels/motorcycle-bubbles)
+If you want the slimmed down version built in Node.js, checkout the repo and use the simple-node branch.
+The easiest way to run this PHP application is to have a new version of PHP installed, and to run the following commands.
 
-### Development with Docker Compose
+### Run Game
 ```sh
+$ composer install
+$ bower install
+$ cd public
+$ php -S localhost:8000
+```
+
+### Run Unit Tests
+```sh
+$ vendor/bin/phing test
+```
+
+### Alternative Run With Docker Compose
+```sh
+$ composer install
 $ bower install
 $ docker-compose up -d
 ```
 
-Once you have the application running, you can access it from the docker-machine ip address, using port 3000. eg. (http://192.168.99.100:3000)
-The circuit breaker analytics can be accessed from the same ip with port 3001, and with url /dashboard. eg. (http://192.168.99.100:3001/dashboard)
-If you are having issues getting Docker setup, I have setup a different branch on Github that has a slimmed down version of the app you can use.  Directions are in that README.md file.
+Once you have the application running, you can access it from http://localhost:8000/ or port 9000 if using Docker Compose and using the Docker IP address.
 
 ### License
 This code is maintained by Jason Michels and open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT)
