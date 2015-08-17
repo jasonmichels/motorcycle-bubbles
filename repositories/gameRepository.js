@@ -1,7 +1,7 @@
 var util         = require("util");
 var EventEmitter = require("events").EventEmitter;
 var Mongo = require('../lib/mongodb');
-var http = require('http');
+var JsonGetRequest = require('../lib/jsonGetRequest');
 
 function GameRepository () {
     EventEmitter.call(this);
@@ -37,50 +37,19 @@ GameRepository.prototype.endGame = function (gameId, json) {
 
 /**
  * API call to bikefree.tv to get list of motorcycles to use as bubbles
- * @TODO Refactor the hard coded data into configuration file or env variables
  */
 GameRepository.prototype.getBubbles = function () {
     var self = this;
 
-    var headers = {
-        'Content-Type': 'application/json'
-    };
+    var request = new JsonGetRequest();
 
-    var options = {
-        host: "bikefree.tv",
-        path: '/api/videos',
-        port: 80,
-        method: 'GET',
-        headers: headers
-    };
-
-    callback = function(response) {
-        var statusCode = response.statusCode;
-        var headers = JSON.stringify(response.headers);
-        response.setEncoding('utf8');
-
-        var responseString = '';
-        response.on('data', function (chunk) {
-            responseString += chunk;
-        });
-
-        response.on('end', function () {
-            var resultObject = JSON.parse(responseString);
-            self.respond(null, resultObject);
-        });
-    };
-
-    var req = http.request(options, callback);
-
-    req.on('error', function(err) {
+    request.on('success', function (result) {
+        self.respond(null, result);
+    }).on('error', function (err) {
         self.respond(null, self.defaultBubbles());
     });
 
-    req.on('timeout', function () {
-        self.respond(null, self.defaultBubbles());
-    });
-
-    req.end();
+    request.execute(process.env.BUBBLES_BASE_URL, '/api/videos', 80)
 };
 
 /**

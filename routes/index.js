@@ -2,8 +2,11 @@ var express = require('express');
 var router = express.Router();
 var GameRepository = require('../repositories/gameRepository');
 
-/* GET home page. */
+/**
+ * Get home page
+ */
 router.get('/', function(req, res, next) {
+
   var gameRepo = new GameRepository();
 
   gameRepo.on('success', function (result) {
@@ -13,6 +16,7 @@ router.get('/', function(req, res, next) {
   });
 
   gameRepo.getBubbles();
+
 });
 
 module.exports = router;

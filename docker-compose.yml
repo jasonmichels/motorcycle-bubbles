@@ -1,7 +1,7 @@
 web:
   build: .
   ports:
-   - "3000:3000"
+    - "3000:3000"
   environment:
     - PORT=3000
     - NODE_ENV=development
@@ -11,6 +11,7 @@ web:
     - ANALYTICS_EVENT_HOST=circuitBreakerAnalytics
     - ANALYTICS_EVENT_PORT=3001
     - DEBUG=history-service:*
+    - BUBBLES_BASE_URL=bikefree.tv
   links:
     - mongoDB:mongoDB
     - circuitBreakerAnalytics:circuitBreakerAnalytics
