@@ -21,6 +21,7 @@
   "dependencies": {
     "bootstrap": "~3.3.5",
     "jquery": "~2.1.4",
-    "handlebars": "~3.0.3"
+    "handlebars": "~3.0.3",
+    "innodb-optimized-uuid": "~1.1.1"
   }
 }

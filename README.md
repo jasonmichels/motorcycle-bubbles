@@ -3,17 +3,20 @@
 ### Installation Locally For Development (Environment variables need set locally)
 ```sh
 $ cd motorcycle-bubbles && npm install
+$ bower install
 $ DEBUG=motorcycle-bubbles:* npm start
 ```
 
 ### Development with Docker
 ```sh
+$ bower install
 $ docker build -t jasonmichels/motorcycle-bubbles .
 $ docker run -it -p 3000:3000 -e "PORT=3000" --rm --name motorcycle-bubbles jasonmichels/motorcycle-bubbles
 ```
 
 ### Production Docker
 ```sh
+$ bower install
 $ docker build -t jasonmichels/motorcycle-bubbles .
 $ docker run -d -p 3000:3000 -e "PORT=3000" --rm --name motorcycle-bubbles jasonmichels/motorcycle-bubbles
 ```

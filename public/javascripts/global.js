@@ -3,6 +3,7 @@
  * @constructor
  */
 function Game(){
+    this.id = null;
     this.canvas = null;
     this.context = null;
     this.bufferCanvas = null;
@@ -11,9 +12,12 @@ function Game(){
     this.y = 10;
     this.bubbleArray = [];
     this.bubbleTimer = null;
+    this.gameTimer = null;
     this.maxBubbles = 50;
     this.poppedBubbles = 0;
     this.missedBubbles = 0;
+    this.maxAllowedMissedBubbles = 5;
+    this.imageSrc = "https://s3.amazonaws.com/BikeFreeTv-Output/user_videos/2/92/thumbs/hd--00001.png";
 }
 
 GAME = new Game();
@@ -23,6 +27,8 @@ GAME = new Game();
  */
 GAME.gameStart = function()
 {
+    var iouuid = window.innodbOptimizedUuid;
+    GAME.id = iouuid.generate();
     GAME.canvas  = document.getElementById("canvasBubbles");
     GAME.context = GAME.canvas.getContext("2d");
     GAME.bufferCanvas = document.createElement("canvas");
@@ -31,12 +37,13 @@ GAME.gameStart = function()
     GAME.bufferCanvasCtx.canvas.height = GAME.context.canvas.height;
 
     GAME.bubbleTimer = setInterval(GAME.addBubble, 400);
-    GAME.draw();
 
     GAME.canvas.addEventListener('mousedown', GAME.bubblePop, false);
     GAME.canvas.addEventListener('touchstart', GAME.bubbleTouchPop, false);
 
-    window.setInterval(GAME.animate, 30);
+    GAME.draw();
+
+    GAME.gameTimer = window.setInterval(GAME.animate, 30);
 };
 
 /**
@@ -50,7 +57,6 @@ GAME.animate = function()
 /**
  * Nuke all bubbles in the game
  *
- * @TODO implement in game
  */
 GAME.nuke = function()
 {
@@ -94,12 +100,10 @@ GAME.pop = function(clickX, clickY)
     var popped = false;
 
     GAME.bubbleArray.forEach(function (bubble, index, array) {
-        console.log('We are in popping stuff');
         if(clickX >= bubble.x && clickX <= bubble.x + bubble.width && clickY >= bubble.y && clickY <= bubble.y + bubble.height){
 
             GAME.bubbleArray.splice(index, 1);
             GAME.poppedBubbles++;
-            console.log('Have popped this many bubbles ' + GAME.poppedBubbles);
 
             popped = true;
             return false;
@@ -108,7 +112,6 @@ GAME.pop = function(clickX, clickY)
 
     if(popped === false){
         GAME.missedBubbles++;
-        console.log('You have missed this many bubbles ' + GAME.missedBubbles);
     }
 };
 
@@ -117,7 +120,11 @@ GAME.pop = function(clickX, clickY)
  */
 GAME.update = function()
 {
-    // @TODO Check to see if the user has missed too many bubbles and end the game
+    GAME.updateScores();
+
+    if (GAME.missedBubbles >= GAME.maxAllowedMissedBubbles) {
+        GAME.endGame();
+    }
 
     GAME.bubbleArray.forEach(function (bubble) {
         if (bubble.y < GAME.context.canvas.height){
@@ -127,7 +134,6 @@ GAME.update = function()
             if (bubble.y > GAME.context.canvas.height){
                 bubble.y = -5;
             }
-
 
             bubble.x += bubble.drift;
 
@@ -144,7 +150,6 @@ GAME.update = function()
 /**
  * Draw the game to the screen
  *
- * @TODO get the update images from the API
  * @returns {boolean}
  */
 GAME.draw = function()
@@ -154,8 +159,7 @@ GAME.draw = function()
     GAME.blank();
 
     var img = new Image();
-    // img.src = "https://s3.amazonaws.com/BikeFreeTv-Output/user_videos/2/92/thumbs/hd--00001.png";
-    img.src = "/images/bubblet.png";
+    img.src = GAME.imageSrc;
 
     GAME.bubbleArray.forEach(function (bubble) {
         GAME.bufferCanvasCtx.drawImage(img, bubble.x, bubble.y, bubble.width, bubble.height);
@@ -179,10 +183,41 @@ GAME.addBubble = function()
     }
 };
 
+/**
+ * Canvas fill
+ */
 GAME.blank = function()
 {
     GAME.bufferCanvasCtx.fillStyle = "rgba(0,0,0,0.8)";
     GAME.bufferCanvasCtx.fillRect(0, 0, GAME.bufferCanvasCtx.canvas.width, GAME.bufferCanvasCtx.canvas.height);
+};
+
+/**
+ * Update users scores
+ */
+GAME.updateScores = function ()
+{
+    $("#js-popped-bubbles-text").text(GAME.poppedBubbles);
+    $("#js-missed-bubbles-text").text(GAME.missedBubbles);
+};
+
+/**
+ * End the game
+ */
+GAME.endGame = function ()
+{
+    clearInterval(GAME.bubbleTimer);
+    clearInterval(GAME.gameTimer);
+    alert('Game is over, you missed too many bubbles: ' + GAME.missedBubbles);
+
+    GAME.poppedBubbles = 0;
+    GAME.missedBubbles = 0;
+    GAME.nuke();
+    GAME.canvas = null;
+    GAME.context = null;
+    GAME.bufferCanvas = null;
+    GAME.bufferCanvasCtx = null;
+    GAME.id = null;
 };
 
 /**
@@ -206,12 +241,12 @@ var MOTORCYCLE = MOTORCYCLE || {};
 
     $(function() {
         // Initialize!
-        MOTORCYCLE.StartGame.init();
+        MOTORCYCLE.Game.init();
     });
 
 }(jQuery));
 
-MOTORCYCLE.StartGame = {
+MOTORCYCLE.Game = {
     init: function(){
         var self = this;
         self.bind();
@@ -219,10 +254,46 @@ MOTORCYCLE.StartGame = {
 
     bind: function(){
 
-        $("body").on("click", '.js-start-game', function(e)
+        var body = $("body");
+        var jumbotron = $(".jumbotron");
+
+        /**
+         * Start the first game
+         */
+        body.on("click", '.js-start-game', function(event)
         {
-            $(".jumbotron").remove();
+            event.preventDefault();
+            jumbotron.hide();
             GAME.gameStart();
+        });
+
+        /**
+         * Start a new game
+         */
+        body.on("click", '.js-new-game', function(event)
+        {
+            event.preventDefault();
+            jumbotron.hide();
+            GAME.endGame();
+            GAME.gameStart();
+        });
+
+        /**
+         * End the game
+         */
+        body.on("click", '.js-end-game', function(event)
+        {
+            event.preventDefault();
+            GAME.endGame();
+        });
+
+        /**
+         * Change the bubble that will be used as an image
+         */
+        body.on("click", '.js-choose-bubble-image', function(event)
+        {
+            event.preventDefault();
+            GAME.imageSrc = $(this).children().prop("src");
         });
     }
 };
