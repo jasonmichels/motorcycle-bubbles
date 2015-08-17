@@ -1,6 +1,5 @@
 var util         = require("util");
 var EventEmitter = require("events").EventEmitter;
-var Mongo = require('../lib/mongodb');
 var JsonGetRequest = require('../lib/jsonGetRequest');
 
 function GameRepository () {
@@ -9,31 +8,6 @@ function GameRepository () {
 
 util.inherits(GameRepository, EventEmitter);
 
-/**
- * End a game by inserting or updating it into the database
- *
- * @param gameId
- * @param json
- */
-GameRepository.prototype.endGame = function (gameId, json) {
-    var self = this;
-
-    json["_id"] = gameId;
-
-    var database = new Mongo();
-
-    database.on('success', function(collection) {
-
-        collection.updateOne(json, json, {upsert:true}, function(err, result) {
-            self.respond(err, result);
-        });
-
-    }).on('error', function (err) {
-        self.respond(err, null);
-    });
-
-    database.execute(gameId);
-};
 
 /**
  * API call to bikefree.tv to get list of motorcycles to use as bubbles

@@ -1,18 +1,16 @@
 # Motorcycle Bubble Popping Game
 
-The easiest way to run this full application is to use Docker (http://docs.docker.com/mac/started/) and Docker Compose.
-Once docker is installed you can use docker-compose tool to get application environment setup and running.
-This will setup the application, a mongo database, and a circuit breaker analytics platform I have built using Node.js.
+This is a slimmed down version of the bubble popping game found in the master and develop branches.
+This simplified version will not rely on external dependencies such as MongoDB or the circuit breaker analytics platform.
 
-### Development with Docker Compose
+### Installation Locally For Development
 ```sh
+$ cd motorcycle-bubbles && npm install
 $ bower install
-$ docker-compose up -d
+$ DEBUG=motorcycle-bubbles:* BUBBLES_BASE_URL=bikefree.tv npm start
 ```
 
-Once you have the application running, you can access it from the docker-machine ip address, using port 3000. eg. (http://192.168.99.100:3000)
-The circuit breaker analytics can be accessed from the same ip with port 3001, and with url /dashboard. eg. (http://192.168.99.100:3001/dashboard)
-If you are having issues getting Docker setup, I have setup a different branch on Github that has a slimmed down version of the app you can use.  Directions are in that README.md file.
+Once you have the application running, you can access it at http://localhost:3000/
 
 ### License
 This code is maintained by Jason Michels and open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT)
